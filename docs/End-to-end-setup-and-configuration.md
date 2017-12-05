@@ -105,7 +105,7 @@ To use zip deployments, you can use the scripts linked [here](scripts-for-zip-ba
 ![Picking a node process to attach](/docs/assets/vscode-lp-picking-process.PNG)
 
 ## Browsing your application source code
-* After process selection, VSCode will open a new debug session window where it would load application scripts in the lower left hand corner of VSCode.
+* After selecting the Node.js process to debug, VSCode will change to the Debug View with a new debug session connected to the selected Node.js process. On the lower left hand corner of VSCode a "LOADED SCRIPTS" widget will appear, which when expanded will show all the user scripts currently loaded on the Node.js application.
 * Depending on the number of scripts in your application, it can take some time.  Please wait for the scripts to load.
 
 ![Scripts loaded after attaching to process](/docs/assets/vscode-lp-loaded-scripts.PNG)
