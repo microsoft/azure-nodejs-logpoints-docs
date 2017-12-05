@@ -1,7 +1,7 @@
 # Index
 - [What are Logpoints](#what-are-logpoints)
 - [How does it work](#how-does-it-work)
-  * [Limitations](#limitations)
+  * [Important points](#important-points)
 - [Sending feedback](#sending-feedback)
 - [VSCode Extension](#vscode-extension)
   * [Enable logpoints](#enable-logpoints)
@@ -24,7 +24,7 @@
 - [Logpoint Expressions](#logpoint-expressions)
 
 # What are Logpoints
-Logpoints are dynamic log statements that you can insert into your application in Azure (as a web app for container environment). Logpoints help you to at realtime print values of objects and variables you are interested in to standard out of the container. With Logpoints, we provide a mechanism for you to debug your application with minimal overhead allowing you to quickly understand and resolve issues with your application.
+Logpoints are dynamic log statements that you can insert into your application in Azure (as a [web app for container](https://azure.microsoft.com/en-us/services/app-service/containers/) environment). Logpoints help you to at realtime print values of objects and variables you are interested in to standard out of the container. With Logpoints, we provide a mechanism for you to debug your application with minimal overhead allowing you to quickly understand and resolve issues with your application.
 
     PLEASE NOTE: This is at best a BETA application. Please dont use this for any production applications without consulting with us. 
 
@@ -35,16 +35,16 @@ The core part of the logpoints experience is an agent that runs alongside your a
 
 When a client requests a debug session, the agent will put your application process into debug mode for the duration of the session. After that you can download scripts, set logpoints and have them be evaluated whenever that code is executed by your application. Once your session is closed/disconnected, the agent will put your application back into non-debug mode.  
 
-## Limitations 
-1. 
+## Important points 
+
 1. Currently logpoints will only work within Web Apps for Containers experience within Azure AppServices. 
 1. Available only for Linux and Node 8.2.1 apps
-1. Your application will need to run within a custom Docker image that you will deploy to AppServices
-    * Logpoints docker image is built on top of the existing Azure AppServices Dockerfile by including the relevant parts to start the  logpoint agent. 
+1. Custom Docker images for Logpoints are built on top of the existing [Azure AppServices Dockerfile](https://github.com/Azure-App-Service/node/tree/master/8.2.1). Additions include changes required to configure and start the logpoints agent. 
 1. The Docker images are available only on the Azure Container registry noted in the sections below. 
+1. Actions done on Azure web portal (e.g. restarting app, deleting app, changing configuration, etc.) while also using the VSCode extension can put your logpoints session in a bad state. This could mean logpoints are not longer set, invalid or crash your application. 
 
 # Sending feedback
-Please send all feedback/questions to the [logpoints@microsoft.com](mailto:logpoints@microsoft.com?Subject=Nodejs%20Logpoints%20Question&Body=Description%3A%20%3Cdescribe%20your%20issue%20here%3E%0D%0A%0D%0ARepro%20steps%3A%20%0D%0A%3CEnter%20the%20steps%20you%20followed%20to%20run%20into%20the%20issue%20you%20are%20describing.%20%20Be%20as%20clear%20as%20possible.%20%3E%0D%0A%0D%0ALogs%3A%20%20%3CPlease%20attach%20the%20agent%20logs%20from%20your%20application%20by%20following%20the%20instructions%20here%20-%20https%3A%2F%2Fgithub.com%2FMicrosoft%2Fvscode-nodejs-logpoints-docs%2Fblob%2Fdhanvik%2Fsetup-instructions%2Fdocs%2FEnd-to-end-setup-and-configuration.md%23downloading-agent-logs%20%3E%0D%0A%0D%0A%0D%0AThank%20you.%0D%0ALogpoints%20team). 
+Please send all feedback/questions to the [logpoints@microsoft.com](mailto:logpoints@microsoft.com?Subject=Nodejs%20Logpoints%20Question&Body=Issue%20type%3A%20%3CFeedback%20or%20Bug%3E%0D%0A%0D%0ADescription%3A%20%3Cdescribe%20your%20issue%20here%3E%0D%0A%0D%0ARepro%20steps%3A%20%0D%0A%3CEnter%20the%20steps%20you%20followed%20to%20run%20into%20the%20issue%20you%20are%20describing.%20%20Be%20as%20clear%20as%20possible.%20%3E%0D%0A%0D%0ALogs%3A%20%20%3CPlease%20attach%20the%20agent%20logs%20from%20your%20application%20by%20following%20the%20instructions%20here%20-%20https%3A%2F%2Fgithub.com%2FMicrosoft%2Fvscode-nodejs-logpoints-docs%2Fblob%2Fdhanvik%2Fsetup-instructions%2Fdocs%2FEnd-to-end-setup-and-configuration.md%23downloading-agent-logs%20%3E%0D%0A%0D%0A%0D%0AThank%20you.%0D%0ALogpoints%20team%29. 
 
 Use the below template if the link above does not work:
 
