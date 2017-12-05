@@ -26,13 +26,17 @@
 # What are Logpoints
 Logpoints are dynamic log statements that you can insert into your application in Azure (as a web app for container environment). Logpoints help you to at realtime print values of objects and variables you are interested in to standard out of the container. With Logpoints, we provide a mechanism for you to debug your application with minimal overhead allowing you to quickly understand and resolve issues with your application.
 
+    PLEASE NOTE: This is at best a BETA application. Please dont use this for any production applications without consulting with us. 
+
 # How does it work
-The core part of the logpoints experience is an agent that runs alongside your application within the AppServices environment. This agent is listening to commands from a logpoints client (e.g. VSCode). The client will request actions on the agent like attaching to a process, downloading scripts, setting/removing logpoints. 
+The core part of the logpoints experience is an agent that runs alongside your application within the AppServices environment. This agent is listening to commands from a logpoints client (e.g. VSCode). The client will request actions on the agent like attaching to a process, fetch scripts from application server, setting/removing logpoints on scripts running on your application server. 
+
 ![Logpoints Architecture](/docs/assets/logpoints-arch.PNG)
 
 When a client requests a debug session, the agent will put your application process into debug mode for the duration of the session. After that you can download scripts, set logpoints and have them be evaluated whenever that code is executed by your application. Once your session is closed/disconnected, the agent will put your application back into non-debug mode.  
 
 ## Limitations 
+1. 
 1. Currently logpoints will only work within Web Apps for Containers experience within Azure AppServices. 
 1. Available only for Linux and Node 8.2.1 apps
 1. Your application will need to run within a custom Docker image that you will deploy to AppServices
