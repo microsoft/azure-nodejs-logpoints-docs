@@ -42,9 +42,10 @@ When a client requests a debug session, the agent will put your application proc
 1. Custom Docker images for Logpoints are built on top of the existing [Azure AppServices Dockerfile](https://github.com/Azure-App-Service/node/tree/master/8.2.1). Additions include changes required to configure and start the logpoints agent. 
 1. The Docker images are available only on the Azure Container registry noted in the sections below. 
 1. Actions done on Azure web portal (e.g. restarting app, deleting app, changing configuration, etc.) while also using the VSCode extension can put your logpoints session in a bad state. This could mean logpoints are not longer set, invalid or crash your application. 
+1. Take a look at the [Logpoint expression section](#logpoint-expressions) below for examples and recommendations when setting logpoints.
 
 # Sending feedback
-Please send all feedback/questions to the [logpoints@microsoft.com](mailto:logpoints@microsoft.com?Subject=Nodejs%20Logpoints%20Question&Body=Issue%20type%3A%20%3CFeedback%20or%20Bug%3E%0D%0A%0D%0ADescription%3A%20%3Cdescribe%20your%20issue%20here%3E%0D%0A%0D%0ARepro%20steps%3A%20%0D%0A%3CEnter%20the%20steps%20you%20followed%20to%20run%20into%20the%20issue%20you%20are%20describing.%20%20Be%20as%20clear%20as%20possible.%20%3E%0D%0A%0D%0ALogs%3A%20%20%3CPlease%20attach%20the%20agent%20logs%20from%20your%20application%20by%20following%20the%20instructions%20here%20-%20https%3A%2F%2Fgithub.com%2FMicrosoft%2Fvscode-nodejs-logpoints-docs%2Fblob%2Fdhanvik%2Fsetup-instructions%2Fdocs%2FEnd-to-end-setup-and-configuration.md%23downloading-agent-logs%20%3E%0D%0A%0D%0A%0D%0AThank%20you.%0D%0ALogpoints%20team%29. 
+Please send all feedback/questions to the [logpoints@microsoft.com](mailto:logpoints@microsoft.com?Subject=Nodejs%20Logpoints%20Question&Body=Issue%20type%3A%20%3CFeedback%20or%20Bug%3E%0D%0A%0D%0ADescription%3A%20%3Cdescribe%20your%20issue%20here%3E%0D%0A%0D%0ARepro%20steps%3A%20%0D%0A%3CEnter%20the%20steps%20you%20followed%20to%20run%20into%20the%20issue%20you%20are%20describing.%20%20Be%20as%20clear%20as%20possible.%20%3E%0D%0A%0D%0ALogs%3A%20%20%3CPlease%20attach%20the%20agent%20logs%20from%20your%20application%20by%20following%20the%20instructions%20here%20-%20https%3A%2F%2Fgithub.com%2FMicrosoft%2Fvscode-nodejs-logpoints-docs%2Fblob%2Fdhanvik%2Fsetup-instructions%2Fdocs%2FEnd-to-end-setup-and-configuration.md%23downloading-agent-logs%20%3E%0D%0A%0D%0A%0D%0AThank%20you.%0D%0ALogpoints%20team%29). *The template after you click on the email link sometimes might not be properly formatted. Sorry for the inconvenience.*
 
 Use the below template if the link above does not work:
 
@@ -184,7 +185,17 @@ By default, logpoints agent will be logging to the /home/logpoints/logs/agent di
 # Logpoint Expressions
 Logpoints are dynamic log statements that you can insert into your running application. 
 
+1. **We do not recommended** changing the state of your application within a logpoint expression.This can result in your application breaking or behaving unexpectedly. 
+1. **We do not recommended** doing expensive calculations within your logpoint expression. If your logpoint expressions are computing values, this can result in your application slowing down. Logpoints are meant to be lightweight logging of application state only. 
+
+## Good Examples
 Below are some examples of valid logpoints expressions for reference
 1. `"this is a logpoint"` : this will print `"this is a logpoint"` whenever the code at the line executed.
-1. `value is ${prop}` : this will print `value is whatever value in prop` at the time the code is executed.
+1. ````value is ${prop}```` : this will print `value is whatever value in prop` at the time the code is executed.
 1. `"value is ", object`: this expression will print the object when the logpoint is evaluated.
+
+## Bad examples
+Below are some bad examples of logpoint expressions
+1. ```while(true) { console.log(`${prop}`)}```: this will put your application in an infinite loop.
+1. ```prop = prop + 1``` : This is updating a variable `prop` that is defined in your application. This is not recommended. 
+
