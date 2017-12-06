@@ -58,7 +58,7 @@ Use the below template if the link above does not work:
 1. Install VSCode
 1. Install `Azure Account` extension following [these instructions](https://code.visualstudio.com/docs/editor/extension-gallery#_browse-and-install-extensions)
 1. Install `Azure App Service tools` extension.
-1. Update `Azure App Service tools` extension to the preview version with Logpoints support following [these instructions](https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix) using the .vsix obtained from [here](https://logpointsassets.blob.core.windows.net/vscode/vscode-azureappservice-0.4.0.vsix)
+1. Update `Azure App Service tools` extension to the preview version with Logpoints support following [these instructions](https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix) using the .vsix obtained from [here](https://logpointsassets.blob.core.windows.net/vscode/vscode-azureappservice-0.5.0.vsix)
 
 ![VScode Extension installation](/docs/assets/vscode-install-vsix.PNG)
 1. Restart VS Code to enable the extensions
