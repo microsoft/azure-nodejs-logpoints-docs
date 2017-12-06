@@ -150,7 +150,7 @@ To use zip deployments, you can use the scripts linked [here](scripts-for-zip-ba
 
 ![Setting a logpoint](/docs/assets/vscode-lp-setting-logpoint.PNG)
 
-* This will open a message box at the top, asking you to enter an expression you want to log. Enter your expression and hit enter. It will take 1-2 secs for the lopoint to be persisted. 
+* This will open a message box at the top, asking you to enter an expression which will get executed each time the associated code is executed, and whose results will get logged automatically. Enter your expression and hit enter. It will take 1-2 secs for the lopoint to be persisted. 
 * If logpoint was set successfully, you should see a blue diamond in the gutter.
 
 ![Gutter glyph after successfully setting logpoint](/docs/assets/vscode-lp-logpoint-success.PNG)
