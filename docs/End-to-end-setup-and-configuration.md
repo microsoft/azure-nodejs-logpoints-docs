@@ -142,7 +142,7 @@ To use zip deployments, you can use the scripts linked [here](scripts-for-zip-ba
 
 ![Scripts loaded after attaching to process](/docs/assets/vscode-lp-loaded-scripts.PNG)
 
-* Click on any script to download the script and load it in VSCode.
+* Click on any script to view the script source code inside VSCode.
 * Once the script is loaded, you can double-click on the script tab header to keep the script pane around. This is useful if you want to keep the scripts where you set logpoints open 
 
 ## Setting logpoints
