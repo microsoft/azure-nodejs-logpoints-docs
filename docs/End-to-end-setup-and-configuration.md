@@ -43,6 +43,7 @@ When a client requests a debug session, the agent will put your application proc
 1. The Docker images are available only on the Azure Container registry noted in the sections below. 
 1. Actions done on Azure web portal (e.g. restarting app, deleting app, changing configuration, etc.) while also using the VSCode extension can put your logpoints session in a bad state. This could mean logpoints are not longer set, invalid or crash your application. 
 1. Take a look at the [Logpoint expression section](#logpoint-expressions) below for examples and recommendations when setting logpoints.
+1. Do not use logpoints with an application that contains ```debugger``` statments in it's source code. The logpoints debugger might pause your application indefinetly.
 
 # Sending feedback
 Please send all feedback/questions to the [logpoints@microsoft.com](mailto:logpoints@microsoft.com?Subject=Nodejs%20Logpoints%20Question&Body=Issue%20type%3A%20%3CFeedback%20or%20Bug%3E%0D%0A%0D%0ADescription%3A%20%3Cdescribe%20your%20issue%20here%3E%0D%0A%0D%0ARepro%20steps%3A%20%0D%0A%3CEnter%20the%20steps%20you%20followed%20to%20run%20into%20the%20issue%20you%20are%20describing.%20%20Be%20as%20clear%20as%20possible.%20%3E%0D%0A%0D%0ALogs%3A%20%20%3CPlease%20attach%20the%20agent%20logs%20from%20your%20application%20by%20following%20the%20instructions%20here%20-%20https%3A%2F%2Fgithub.com%2FMicrosoft%2Fvscode-nodejs-logpoints-docs%2Fblob%2Fdhanvik%2Fsetup-instructions%2Fdocs%2FEnd-to-end-setup-and-configuration.md%23downloading-agent-logs%20%3E%0D%0A%0D%0A%0D%0AThank%20you.%0D%0ALogpoints%20team%29). *The template after you click on the email link sometimes might not be properly formatted. Sorry for the inconvenience.*
@@ -198,3 +199,4 @@ Below are some examples of valid logpoints expressions for reference
 Below are some bad examples of logpoint expressions
 1. ```while(true) { console.log(`${prop}`)}```: this will put your application in an infinite loop.
 1. ```prop = prop + 1``` : This is updating a variable `prop` that is defined in your application. This is not recommended. 
+1. ```debugger```: This will cause the debugger to pause your program until the debugger is disconnected. This is strongly not recommended. 
