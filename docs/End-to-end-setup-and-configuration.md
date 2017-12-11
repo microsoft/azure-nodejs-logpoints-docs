@@ -41,7 +41,7 @@ When a client requests a debug session, the agent will put your application proc
 ## Limitations
 1. LogPoints can only be set from VS Code.
 1. Currently logpoints will only work within Web Apps for Containers experience within Azure AppServices. 
-1. Available only for Linux and Node 8.2.1 apps
+1. Available only on Linux and applications running on Node 8.8.1
 1. Custom Docker images for Logpoints are built on top of the existing [Azure AppServices Dockerfile](https://github.com/Azure-App-Service/node/tree/master/8.2.1). Additions include changes required to configure and start the logpoints agent. 
 1. The Docker images are available only on the Azure Container registry noted in the sections below. 
 1. Actions done on Azure web portal (e.g. restarting app, deleting app, changing configuration, etc.) while also using the VSCode extension can put your logpoints session in a bad state. This could mean logpoints are not longer set, invalid or crash your application. 
