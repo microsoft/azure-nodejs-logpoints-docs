@@ -1,6 +1,7 @@
-# Index
-- [What are Logpoints](#what-are-logpoints)
-- [How does it work](#how-does-it-work)
+# LogPoints for Node.js on Azure
+
+- [What are Logpoints?](#what-are-logpoints)
+- [How does Logpoints work?](#how-does-it-work)
   * [Important points](#important-points)
 - [Sending feedback](#sending-feedback)
 - [VSCode Extension](#vscode-extension)
@@ -23,39 +24,34 @@
   * [Disconnecting your session](#disconnecting-your-session)
 - [Logpoint Expressions](#logpoint-expressions)
 
-# What are Logpoints
-Logpoints are dynamic log statements that you can insert into your application in Azure (as a [web app for container](https://azure.microsoft.com/en-us/services/app-service/containers/) environment). Logpoints help you to at realtime print values of objects and variables you are interested in to standard out of the container. With Logpoints, we provide a mechanism for you to debug your application with minimal overhead allowing you to quickly understand and resolve issues with your application.
+# What are Logpoints?
+Logpoints are dynamic log statements that you can insert into your Node.js application when running on Azure (as a [web app for container](https://azure.microsoft.com/en-us/services/app-service/containers/) environment). 
+
+Logpoints help you to at realtime print values of objects and variables you are interested in to standard out of the container. With Logpoints, we provide a mechanism for you to debug your application with minimal overhead allowing you to quickly understand and resolve issues with your application.
 
     PLEASE NOTE: This is at best a BETA application. Please dont use this for any production applications without consulting with us. 
 
-# How does it work
+# How does Logpoints work?
 The core part of the logpoints experience is an agent that runs alongside your application within the AppServices environment. This agent is listening to commands from a logpoints client (e.g. VSCode). The client will request actions on the agent like attaching to a process, fetch scripts from application server, setting/removing logpoints on scripts running on your application server. 
 
 ![Logpoints Architecture](/docs/assets/logpoints-arch.PNG)
 
 When a client requests a debug session, the agent will put your application process into debug mode for the duration of the session. After that you can download scripts, set logpoints and have them be evaluated whenever that code is executed by your application. Once your session is closed/disconnected, the agent will put your application back into non-debug mode.  
 
-## Important points 
-
+## Limitations
+1. LogPoints can only be set from VS Code.
 1. Currently logpoints will only work within Web Apps for Containers experience within Azure AppServices. 
 1. Available only for Linux and Node 8.2.1 apps
 1. Custom Docker images for Logpoints are built on top of the existing [Azure AppServices Dockerfile](https://github.com/Azure-App-Service/node/tree/master/8.2.1). Additions include changes required to configure and start the logpoints agent. 
 1. The Docker images are available only on the Azure Container registry noted in the sections below. 
 1. Actions done on Azure web portal (e.g. restarting app, deleting app, changing configuration, etc.) while also using the VSCode extension can put your logpoints session in a bad state. This could mean logpoints are not longer set, invalid or crash your application. 
-1. Take a look at the [Logpoint expression section](#logpoint-expressions) below for examples and recommendations when setting logpoints.
+1. Using invalid LogPoints expression can cause your app to crash. Take a look at the [Logpoint expression section](#logpoint-expressions) below for examples and recommendations when setting logpoints.
 
-# Sending feedback
-Please send all feedback/questions to the [logpoints@microsoft.com](mailto:logpoints@microsoft.com?Subject=Nodejs%20Logpoints%20Question&Body=Issue%20type%3A%20%3CFeedback%20or%20Bug%3E%0D%0A%0D%0ADescription%3A%20%3Cdescribe%20your%20issue%20here%3E%0D%0A%0D%0ARepro%20steps%3A%20%0D%0A%3CEnter%20the%20steps%20you%20followed%20to%20run%20into%20the%20issue%20you%20are%20describing.%20%20Be%20as%20clear%20as%20possible.%20%3E%0D%0A%0D%0ALogs%3A%20%20%3CPlease%20attach%20the%20agent%20logs%20from%20your%20application%20by%20following%20the%20instructions%20here%20-%20https%3A%2F%2Fgithub.com%2FMicrosoft%2Fvscode-nodejs-logpoints-docs%2Fblob%2Fdhanvik%2Fsetup-instructions%2Fdocs%2FEnd-to-end-setup-and-configuration.md%23downloading-agent-logs%20%3E%0D%0A%0D%0A%0D%0AThank%20you.%0D%0ALogpoints%20team%29). *The template after you click on the email link sometimes might not be properly formatted. Sorry for the inconvenience.*
+# Getting started
+To get started two you to install a few extension for VS Code, and deploy your Node app to Azure using App Services.
 
-Use the below template if the link above does not work:
-
-* Description: brief description of the issue
-* Repro steps: Steps you did that resulted in the error you saw
-* Logs: Attach the logs from your agent. You can download the logs by following the instructions [here](#downloading-agent-logs)
-* Any other attachments that you think could help us with investigations. 
-
-# VSCode Extension
-1. Install VSCode
+## Install the VSCode Extension
+1. Install VS Code from http://code.visualstudio.com
 1. Install `Azure Account` extension following [these instructions](https://code.visualstudio.com/docs/editor/extension-gallery#_browse-and-install-extensions)
 1. Install `Azure App Service tools` extension.
 1. Update `Azure App Service tools` extension to the preview version with Logpoints support following [these instructions](https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix) using the .vsix obtained from [here](https://logpointsassets.blob.core.windows.net/vscode/vscode-azureappservice-0.5.0.vsix)
@@ -63,26 +59,27 @@ Use the below template if the link above does not work:
 ![VScode Extension installation](/docs/assets/vscode-install-vsix.PNG)
 1. Restart VS Code to enable the extensions
 
-## Enable logpoints
+### Enable logpoints
 1. After installation, enable Logpoints by adding the following line in **User Settings** section under ``` File > Preferences > Settings```
 ```
 "appService.logpoints": true
 ```
 ![Updating settings](/docs/assets/vscode-settings.PNG)
 
-## Azure Setup and config
+### Azure Setup and config
 1. After installing the extensions, you will need to complete the login/setup into Azure by clicking on the "Sign in to Azure..." node in the AZURE APP SERVICE widget.
 
-# WebApp for containers environment setup and configuration
+## Create new App Service environment on Azure 
+The next step is to create a App Service envrionment on Azure, where you'll be using our LogPoints-enabled container to host your Node.js application.
 
-## Creating WebApp For containers environment
+### Creating WebApp For containers environment
 1. Click here to get started [Web App for Containers]( https://azuremarketplace.microsoft.com/en/marketplace/apps/Microsoft.AppSvcLinux/?utm_source=mkt-AppSvcLinux&utm_content=43048d7e6854426a81f10470cdba990a&utm_campaign=social&utm_medium=E)
 
 ![Web App for Containers](/docs/assets/webapp-for-containers-launch.PNG)
 
 1. Login into the Azure console.
 
-## Configuring new AppService environment
+### Setup new App Service environment
 After clicking "Create" to create a new WebApp for container, follow the instructions below to create a new environment using the Logpoints container.
 1. Enter an app name 
 1. Select a subscription
@@ -97,8 +94,7 @@ After clicking "Create" to create a new WebApp for container, follow the instruc
 
 ![Docker repo setup](/docs/assets/appsvc-docker-repo-setup.PNG)
 
-
-## Configure diagnostics logging
+### Configure diagnostics logging
 After your environment is created, you will need to enable diagnostic logging to be able to stream logs when using logpoints. 
 1.  Browse to your environment's **Diagnostic logs** section and click on **FIle System** as shown below.
 1. Hit `Save`. This will restart your container . 
@@ -110,19 +106,20 @@ Once your environment is ready, your environment should show the default Azure s
 
 ![Default start page for app](/docs/assets/default-app-start-page.PNG)
 
+## Deploying your Node Application to Azure
 
-#  Deploying your Node Application
-## Git deployments
+### Git deployments
 * To enable Git based deployments, you will need to update **Properties** for your environment to set the following to true
 
 ![Setting up git base deployments](/docs/assets/appsvc-config-git-setup.PNG)
 
 * Setup your environment to enable Git based deployments by following the instructions [here](https://docs.microsoft.com/en-us/azure/app-service/app-service-deploy-local-git). 
 
-## Zip deployments
+### Zip deployments
 To use zip deployments, you can use the scripts linked [here](scripts-for-zip-based-app-deployment.md)
 
-# Setting up Logpoints
+# Using Logpoints from VS Code
+
 ## Starting a logpoints session
 1. After VSCode is opened, open any arbitrary folder. (This is a workaround for a VSCode bug, it's fixed but not released)
 1. Using VSCode AppService Extension connect to the environment you created above.
@@ -145,7 +142,7 @@ To use zip deployments, you can use the scripts linked [here](scripts-for-zip-ba
 * Click on any script to view the script source code inside VSCode.
 * Once the script is loaded, you can double-click on the script tab header to keep the script pane around. This is useful if you want to keep the scripts where you set logpoints open 
 
-## Setting logpoints
+## Setting logpoints 
 * Once your script has loaded, set logpoints by right clicking on the line where you want to set a logpoint at and selecting `Set or remove logpoint` from the context menu.
 
 ![Setting a logpoint](/docs/assets/vscode-lp-setting-logpoint.PNG)
@@ -155,7 +152,7 @@ To use zip deployments, you can use the scripts linked [here](scripts-for-zip-ba
 
 ![Gutter glyph after successfully setting logpoint](/docs/assets/vscode-lp-logpoint-success.PNG)
 
-    * If logpoint was not set successfully, there was an error in your expression. Make sure to have proper JSON string as an expression.
+* If logpoint was not set successfully, there was an error in your expression. Make sure to have proper JSON string as an expression.
 * More details on how to set correct expressions, refer [here](#logpoint-expressions) 
 
 ## Downloading agent logs
@@ -181,6 +178,16 @@ By default, logpoints agent will be logging to the /home/logpoints/logs/agent di
 
 ## Disconnecting your session
 * After your investigations are completed, you can disconnect from the agent by clicking on the `Stop` icon in the debug adapter or closing VScode.
+
+# Reporting feedback
+Please send all feedback/questions to the [logpoints@microsoft.com](mailto:logpoints@microsoft.com?Subject=Nodejs%20Logpoints%20Question&Body=Issue%20type%3A%20%3CFeedback%20or%20Bug%3E%0D%0A%0D%0ADescription%3A%20%3Cdescribe%20your%20issue%20here%3E%0D%0A%0D%0ARepro%20steps%3A%20%0D%0A%3CEnter%20the%20steps%20you%20followed%20to%20run%20into%20the%20issue%20you%20are%20describing.%20%20Be%20as%20clear%20as%20possible.%20%3E%0D%0A%0D%0ALogs%3A%20%20%3CPlease%20attach%20the%20agent%20logs%20from%20your%20application%20by%20following%20the%20instructions%20here%20-%20https%3A%2F%2Fgithub.com%2FMicrosoft%2Fvscode-nodejs-logpoints-docs%2Fblob%2Fdhanvik%2Fsetup-instructions%2Fdocs%2FEnd-to-end-setup-and-configuration.md%23downloading-agent-logs%20%3E%0D%0A%0D%0A%0D%0AThank%20you.%0D%0ALogpoints%20team%29). *The template after you click on the email link sometimes might not be properly formatted. Sorry for the inconvenience.*
+
+Use the below template if the link above does not work:
+
+* Description: brief description of the issue
+* Repro steps: Steps you did that resulted in the error you saw
+* Logs: Attach the logs from your agent. You can download the logs by following the instructions [here](#downloading-agent-logs)
+* Any other attachments that you think could help us with investigations. 
 
 # Logpoint Expressions
 Logpoints are dynamic log statements that you can insert into your running application. 
