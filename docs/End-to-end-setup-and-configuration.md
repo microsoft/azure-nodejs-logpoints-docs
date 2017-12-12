@@ -170,6 +170,7 @@ By default, logpoints agent will be logging to the /home/logpoints/logs/agent di
 ![Start to stream logs from your app](/docs/assets/vscode-lp-log-streaming.PNG)
     
     * If this is the first time streaming logs, it will ask you for an application restart. 
+    * All Logpoints output would be prefixed by "[logpoints-agent] :"
 
 1. Now browse to your  application to trigger the code where you set the logpoint(s).
 1. Your logpoint should appear in the `Output` pane of VSCode.
@@ -177,7 +178,9 @@ By default, logpoints agent will be logging to the /home/logpoints/logs/agent di
 ![Logpoint showing up in log stream](/docs/assets/vscode-lp-sample.PNG)
 
 ## Disconnecting your session
-* After your investigations are completed, you can disconnect from the agent by clicking on the `Stop` icon in the debug adapter or closing VScode.
+* After your investigations are completed, you can disconnect from the agent by clicking on the `Stop` ![Logpoint showing up in log stream](/docs/assets/vscode-stop-debugging.PNG) icon in the debug adapter or closing VScode.
+
+![Logpoint showing up in log stream](/docs/assets/vscode-lp-disconnected.PNG)
 
 # Reporting feedback
 Please send all feedback/questions to the [logpoints@microsoft.com](mailto:logpoints@microsoft.com?Subject=Nodejs%20Logpoints%20Question&Body=Issue%20type%3A%20%3CFeedback%20or%20Bug%3E%0D%0A%0D%0ADescription%3A%20%3Cdescribe%20your%20issue%20here%3E%0D%0A%0D%0ARepro%20steps%3A%20%0D%0A%3CEnter%20the%20steps%20you%20followed%20to%20run%20into%20the%20issue%20you%20are%20describing.%20%20Be%20as%20clear%20as%20possible.%20%3E%0D%0A%0D%0ALogs%3A%20%20%3CPlease%20attach%20the%20agent%20logs%20from%20your%20application%20by%20following%20the%20instructions%20here%20-%20https%3A%2F%2Fgithub.com%2FMicrosoft%2Fvscode-nodejs-logpoints-docs%2Fblob%2Fdhanvik%2Fsetup-instructions%2Fdocs%2FEnd-to-end-setup-and-configuration.md%23downloading-agent-logs%20%3E%0D%0A%0D%0A%0D%0AThank%20you.%0D%0ALogpoints%20team%29). *The template after you click on the email link sometimes might not be properly formatted. Sorry for the inconvenience.*
@@ -205,3 +208,7 @@ Below are some examples of valid logpoints expressions for reference
 Below are some bad examples of logpoint expressions
 1. ```while(true) { console.log(`${prop}`)}```: this will put your application in an infinite loop.
 1. ```prop = prop + 1``` : This is updating a variable `prop` that is defined in your application. This is not recommended. 
+1. **Runtime errors**: ```foo=bar``` : If `bar` is not defined, you will see an error similar to below in the console output for your AppService. ![Logpoint showing up in log stream](/docs/assets/vscode-logpoint-bad-expression-1.PNG)
+1. **Invalid expressions**: If logpoints are invalid, you can see an error in VSCode as shown here. 
+![Logpoint showing up in log stream](/docs/assets/vscode-bad-lp-alert.PNG) 
+
