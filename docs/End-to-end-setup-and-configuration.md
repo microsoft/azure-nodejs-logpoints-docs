@@ -57,9 +57,8 @@ To get started, you need to install a few extension for VS Code, and deploy your
 
 ## Install the VSCode Extension
 1. Install VS Code from http://code.visualstudio.com
-1. Install `Azure Account` extension following [these instructions](https://code.visualstudio.com/docs/editor/extension-gallery#_browse-and-install-extensions)
-1. Install `Azure App Service tools` extension.
-![VScode Extension installation](/docs/assets/vscode-install-vsix.PNG)
+1. Install `Azure Account` extension from the Marketplace (http://marketplace.visualstudio.com/#VSCode)
+1. Install `Azure App Service tools` extension from the Marketplace
 1. Restart VS Code to enable the extensions
 
 ### Enable logpoints preview
