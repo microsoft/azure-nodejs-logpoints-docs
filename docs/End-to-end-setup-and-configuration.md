@@ -1,6 +1,5 @@
 # LogPoints for Node.js on Azure
 
-- [LogPoints for Node.js on Azure](#logpoints-for-nodejs-on-azure)
 - [What are Logpoints?](#what-are-logpoints-)
 - [How does Logpoints work?](#how-does-logpoints-work-)
   * [Limitations](#limitations)
@@ -16,6 +15,7 @@
     + [Git deployments](#git-deployments)
     + [Zip deployments](#zip-deployments)
 - [Using Logpoints from VS Code](#using-logpoints-from-vs-code)
+  * [Enable streaming logs](#enable-streaming-logs)
   * [Starting a logpoints session](#starting-a-logpoints-session)
   * [Attaching to a node process](#attaching-to-a-node-process)
   * [Browsing your application source code](#browsing-your-application-source-code)
@@ -53,7 +53,7 @@ When a client requests a debug session, the agent will put your application proc
 1. Using invalid LogPoints expression can cause your app to crash. Take a look at the [Logpoint expression section](#logpoint-expressions) below for examples and recommendations when setting logpoints.
 
 # Getting started
-To get started two you to install a few extension for VS Code, and deploy your Node app to Azure using App Services.
+To get started, you need to install a few extension for VS Code, and deploy your Node app to Azure using App Services.
 
 ## Install the VSCode Extension
 1. Install VS Code from http://code.visualstudio.com
@@ -125,12 +125,30 @@ To use zip deployments, you can use the scripts linked [here](scripts-for-zip-ba
 
 # Using Logpoints from VS Code
 
+## Enable streaming logs
+
+Before you can start a Logpoints session, you need to enable streaming logs.
+
+* To enable streaming logs, 
+
+  * Click on the ![Folder](/docs/assets/vscode-folder-icon.PNG) to interact with the Azure AppService extention, 
+  * Right click on your AppService environment and click on ```View Streaming logs``` to start streaming logs. 
+
+![Start to stream logs from your app](/docs/assets/vscode-lp-log-streaming.PNG)
+
+  * When prompted, choose "Yes".
+ 
+![Enable streaming log](/docs/assets/vscode-enable-streaming-log.png)
+
+  This operation only needs to be done once as long as the streaming logs for this App Service remains enabled.
+
+* As an alternative, you can also enable streaming log by following the instructions [here](https://docs.microsoft.com/en-us/azure/app-service/web-sites-enable-diagnostic-log).
 ## Starting a logpoints session
     
 <table>
   <tr>
     <td>
-    <img src="assets/warning.PNG"/>
+    <img src="assets/warning.png"/>
     </td>
     <td>
         To avoid running into a VSCode bug, before you start a session please open any folder and continue to the next step.
@@ -142,6 +160,8 @@ To use zip deployments, you can use the scripts linked [here](scripts-for-zip-ba
 1. Right click on the environment and click on `Start Logpoints debug session` in the context menu as shown below.
 
 ![Launching Logpoints session](/docs/assets/vscode-launch-lp-session.PNG)
+
+3. Before the Logpoints debug session is started, Streaming Logs output pane will be opened automatically for you.
 
 ## Attaching to a node process
 * Once VSCode is able to start a session with the agent, you will see a picker at the top of the screen listing the currently running node processes. Pick the process you want to debug. 
@@ -182,24 +202,17 @@ By default, logpoints agent will be logging to the ```/home/logpoints/logs/agent
 <table>
   <tr>
     <td>
-    <img src="assets/warning.PNG"/>
+    <img src="assets/warning.png"/>
     </td>
     <td>
       <ul>
-        <li>If this is the first time streaming logs, it will ask you for an application restart. </li>
         <li>All Logpoints output would be prefixed by <b>"[logpoints-agent] :"</b></li>
       </ul>
     </td>
   </tr>
 </table>
 
-1. After logpoint was set successfully, 
-    * Click on the ![Folder](/docs/assets/vscode-folder-icon.PNG) to interact with the Azure AppService extention, 
-    * Right click on your AppService environment and click on ```View Streaming logs``` to start streaming logs. 
-
-![Start to stream logs from your app](/docs/assets/vscode-lp-log-streaming.PNG)
-    
-1. Now browse to your  application to trigger the code where you set the logpoint(s).
+1. After logpoint was set successfully, browse to your application to trigger the code where you set the logpoint(s).
 1. Your logpoint should appear in the `Output` pane of VSCode.
 
 ![Logpoint showing up in log stream](/docs/assets/vscode-lp-sample.PNG)
