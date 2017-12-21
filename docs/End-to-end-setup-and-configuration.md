@@ -240,7 +240,7 @@ Logpoints are dynamic log statements that you can insert into your running appli
 ## Good Examples
 Below are some examples of valid logpoints expressions for reference
 1. `"this is a logpoint"` : this will print `"this is a logpoint"` whenever the code at the line executed.
-1. ````value is ${prop}```` : this will print `value is whatever value in prop` at the time the code is executed.
+1. `` `value is ${prop}` `` : this will print `value is whatever value in prop` at the time the code is executed.
 1. `"value is ", object`: this expression will print the object when the logpoint is evaluated.
 
 ## Bad examples
