@@ -117,6 +117,8 @@ Once your environment is ready, your environment should show the default Azure s
 
 * Setup your environment to enable Git based deployments by following the instructions [here](https://docs.microsoft.com/en-us/azure/app-service/app-service-deploy-local-git). 
 
+If the "Deployment Options" option is greyed out in the portal, make sure that you have refreshed the page after setting `WEBSITES_ENABLE_APP_SERVICE_STORAGE` to `true` in App Settings.
+
 ### Zip deployments
 To use zip deployments, you can use the scripts linked [here](scripts-for-zip-based-app-deployment.md)
 
