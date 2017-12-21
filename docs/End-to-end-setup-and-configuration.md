@@ -68,6 +68,8 @@ To get started, you need to install a few extension for VS Code, and deploy your
 ```
 ![Updating settings](/docs/assets/vscode-settings.PNG)
 
+2. Reload VS Code by opening the command palette and selecting "Reload Window".
+
 ### Azure Setup and config
 1. After installing the extensions, you will need to complete the login/setup into Azure by clicking on the "Sign in to Azure..." node in the AZURE APP SERVICE widget.
 
