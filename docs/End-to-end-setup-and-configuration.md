@@ -51,6 +51,7 @@ When a client requests a debug session, the agent will put your application proc
 1. The Docker images are available only on the Azure Container registry noted in the sections below. 
 1. Actions done on Azure web portal (e.g. restarting app, deleting app, changing configuration, etc.) while also using the VS Code extension can put your logpoints session in a bad state. This could mean logpoints are not longer set, invalid or crash your application. 
 1. Using invalid LogPoints expression can cause your app to crash. Take a look at the [Logpoint expression section](#logpoint-expressions) below for examples and recommendations when setting logpoints.
+1. Do not use logpoints with an application that contains ```debugger``` statments in it's source code. The logpoints debugger might pause your application indefinetly.
 
 # Getting started
 To get started, you need to install a few extension for VS Code, and deploy your Node app to Azure using App Services.
@@ -248,7 +249,7 @@ Below are some examples of valid logpoints expressions for reference
 Below are some bad examples of logpoint expressions
 1. ```while(true) { console.log(`${prop}`)}```: this will put your application in an infinite loop.
 1. ```prop = prop + 1``` : This is updating a variable `prop` that is defined in your application. This is not recommended. 
+1. ```debugger```: This will cause the debugger to pause your program until the debugger is disconnected. This is strongly not recommended. 
 1. **Runtime errors**: ```foo=bar``` : If `bar` is not defined, you will see an error similar to below in the console output for your AppService. ![Logpoint showing up in log stream](/docs/assets/vscode-logpoint-bad-expression-1.PNG)
 1. **Invalid expressions**: If logpoints are invalid, you can see an error in VS Code as shown here. 
 ![Logpoint showing up in log stream](/docs/assets/vscode-bad-lp-alert.PNG) 
-
