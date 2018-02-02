@@ -1,8 +1,5 @@
 # LogPoints for Node.js on Azure
 
-- [What are Logpoints?](#what-are-logpoints-)
-- [How does Logpoints work?](#how-does-logpoints-work-)
-  * [Limitations](#limitations)
 - [Getting started](#getting-started)
   * [Install the VS Code Extension](#install-the-vscode-extension)
     + [Enable logpoints](#enable-logpoints)
@@ -29,30 +26,6 @@
   * [Bad examples](#bad-examples)
 
 
-# What are Logpoints?
-Logpoints are dynamic log statements that you can insert into your Node.js application when running on Azure (as a [web app for container](https://azure.microsoft.com/en-us/services/app-service/containers/) environment). 
-
-Logpoints help you to at realtime print values of objects and variables you are interested in to standard out of the container. With Logpoints, we provide a mechanism for you to debug your application with minimal overhead allowing you to quickly understand and resolve issues with your application.
-
-    PLEASE NOTE: This is at best a BETA application. Please dont use this for any production applications without consulting with us. 
-
-# How does Logpoints work?
-The core part of the logpoints experience is an agent that runs alongside your application within the AppServices environment. This agent is listening to commands from a logpoints client (e.g. VS Code). The client will request actions on the agent like attaching to a process, fetch scripts from application server, setting/removing logpoints on scripts running on your application server. 
-
-![Logpoints Architecture](/docs/assets/logpoints-arch.PNG)
-
-When a client requests a debug session, the agent will put your application process into debug mode for the duration of the session. After that you can download scripts, set logpoints and have them be evaluated whenever that code is executed by your application. Once your session is closed/disconnected, the agent will put your application back into non-debug mode.  
-
-## Limitations
-1. LogPoints can only be set from VS Code.
-1. Currently logpoints will only work within Linux based Web Apps for Containers experience within Azure AppServices. 
-1. Applications must be running on Node 8.8.1
-1. Custom Docker images for Logpoints are built on top of the existing [Azure AppServices Dockerfile](https://github.com/Azure-App-Service/node/tree/master/8.2.1). Additions include changes required to configure and start the logpoints agent. 
-1. The Docker images are available only on the Azure Container registry noted in the sections below. 
-1. Actions done on Azure web portal (e.g. restarting app, deleting app, changing configuration, etc.) while also using the VS Code extension can put your logpoints session in a bad state. This could mean logpoints are not longer set, invalid or crash your application. 
-1. Using invalid LogPoints expression can cause your app to crash. Take a look at the [Logpoint expression section](#logpoint-expressions) below for examples and recommendations when setting logpoints.
-1. Do not use logpoints with an application that contains ```debugger``` statments in it's source code. The logpoints debugger might pause your application indefinetly.
-
 # Getting started
 To get started, you need to install a few extension for VS Code, and deploy your Node app to Azure using App Services.
 
@@ -73,7 +46,7 @@ To get started, you need to install a few extension for VS Code, and deploy your
 ### Azure Setup and config
 1. After installing the extensions, you will need to complete the login/setup into Azure by clicking on the "Sign in to Azure..." node in the `Azure App Service` explorer or by opening the Command Palette (`F1`) and choosing `Azure: Sign In`.
 
-## Create new App Service environment on Azure 
+## Create new App Service environment on Azure
 The next step is to create a App Service envrionment on Azure, where you'll be using our LogPoints-enabled container to host your Node.js application.
 
 ### Creating WebApp For containers environment
@@ -85,13 +58,13 @@ The next step is to create a App Service envrionment on Azure, where you'll be u
 
 ### Setup new App Service environment
 After clicking "Create" to create a new WebApp for container, follow the instructions below to create a new environment using the Logpoints container.
-1. Enter an app name 
+1. Enter an app name
 1. Select a subscription
 1. Create a new resource group **OR** create a new one..
 1. Click Configure container
     1. Select `Private Registry`
     1. Image and optional tag: `azurenodelogpoints.azurecr.io/azure-nodejs-logpoints:latest`
-    1. Server URL: `https://azurenodelogpoints.azurecr.io` 
+    1. Server URL: `https://azurenodelogpoints.azurecr.io`
     1. Login username : `b19ab41b-f194-4269-b551-040a6446ca3a`
     1. Password: `%96c8064e-d3d0-11e7-b604-239b97631f61~`
 1. Hit the `OK` button and the blue `Create` button
@@ -99,9 +72,9 @@ After clicking "Create" to create a new WebApp for container, follow the instruc
 ![Docker repo setup](/docs/assets/appsvc-docker-repo-setup.PNG)
 
 ### Configure diagnostics logging
-After your environment is created, you will need to enable diagnostic logging to be able to stream logs when using logpoints. 
+After your environment is created, you will need to enable diagnostic logging to be able to stream logs when using logpoints.
 1. Browse to your environment's **Diagnostic logs** section and click on **FIle System** as shown below.
-1. Hit `Save`. This will restart your container . 
+1. Hit `Save`. This will restart your container .
 
 ![AppService container diagnostics logs setup](/docs/assets/appsvc-config-diag-logs.PNG)
 
@@ -117,7 +90,7 @@ Once your environment is ready, your environment should show the default Azure s
 
 ![Setting up git base deployments](/docs/assets/appsvc-config-git-setup.PNG)
 
-* Setup your environment to enable Git based deployments by following the instructions [here](https://docs.microsoft.com/en-us/azure/app-service/app-service-deploy-local-git). 
+* Setup your environment to enable Git based deployments by following the instructions [here](https://docs.microsoft.com/en-us/azure/app-service/app-service-deploy-local-git).
 
 If the "Deployment Options" option is greyed out in the portal, make sure that you have refreshed the page after setting `WEBSITES_ENABLE_APP_SERVICE_STORAGE` to `true` in App Settings.
 
@@ -130,22 +103,22 @@ To use zip deployments, you can use the scripts linked [here](scripts-for-zip-ba
 
 Before you can start a Logpoints session, you need to enable streaming logs.
 
-* To enable streaming logs, 
+* To enable streaming logs,
 
-  * Click on the ![Folder](/docs/assets/vscode-folder-icon.PNG) to interact with the Azure AppService extension, 
-  * Right click on your AppService environment and click on ```View Streaming logs``` to start streaming logs. 
+  * Click on the ![Folder](/docs/assets/vscode-folder-icon.PNG) to interact with the Azure AppService extension,
+  * Right click on your AppService environment and click on ```View Streaming logs``` to start streaming logs.
 
 ![Start to stream logs from your app](/docs/assets/vscode-lp-log-streaming.PNG)
 
   * When prompted, choose "Yes".
- 
+
 ![Enable streaming log](/docs/assets/vscode-enable-streaming-log.png)
 
   This operation only needs to be done once as long as the streaming logs for this App Service remains enabled.
 
 * As an alternative, you can also enable streaming log by following the instructions [here](https://docs.microsoft.com/en-us/azure/app-service/web-sites-enable-diagnostic-log).
 ## Starting a logpoints session
-    
+
 <table>
   <tr>
     <td>
@@ -155,7 +128,7 @@ Before you can start a Logpoints session, you need to enable streaming logs.
         To avoid running into a VS Code bug, before you start a session please open any folder and continue to the next step.
     </td>
   </tr>
-</table> 
+</table>
 
 1. Using VS Code AppService Extension, browse to your AppService environment.
 1. Right click on the environment and click on `Start Logpoints debug session` in the context menu as shown below.
@@ -165,7 +138,7 @@ Before you can start a Logpoints session, you need to enable streaming logs.
 3. Before the Logpoints debug session is started, Streaming Logs output pane will be opened automatically for you.
 
 ## Attaching to a node process
-* Once VS Code is able to start a session with the agent, you will see a picker at the top of the screen listing the currently running node processes. Pick the process you want to debug. 
+* Once VS Code is able to start a session with the agent, you will see a picker at the top of the screen listing the currently running node processes. Pick the process you want to debug.
 
 ![Picking a node process to attach](/docs/assets/vscode-lp-picking-process.PNG)
 
@@ -176,20 +149,20 @@ Before you can start a Logpoints session, you need to enable streaming logs.
 ![Scripts loaded after attaching to process](/docs/assets/vscode-lp-loaded-scripts.PNG)
 
 * Click on any script to view the script source code inside VS Code.
-* Once the script is loaded, you can double-click on the script tab header to keep the script pane around. This is useful if you want to keep the scripts where you set logpoints open 
+* Once the script is loaded, you can double-click on the script tab header to keep the script pane around. This is useful if you want to keep the scripts where you set logpoints open
 
-## Setting logpoints 
+## Setting logpoints
 * Once your script has loaded, set logpoints by right clicking on the line where you want to set a logpoint at and selecting `Set or remove logpoint` from the context menu.
 
 ![Setting a logpoint](/docs/assets/vscode-lp-setting-logpoint.PNG)
 
-* This will open a message box at the top, asking you to enter an expression which will get executed each time the associated code is executed, and whose results will get logged automatically. Enter your expression and hit enter. It will take 1-2 secs for the lopoint to be persisted. 
+* This will open a message box at the top, asking you to enter an expression which will get executed each time the associated code is executed, and whose results will get logged automatically. Enter your expression and hit enter. It will take 1-2 secs for the lopoint to be persisted.
 * If logpoint was set successfully, you should see a blue diamond in the gutter.
 
 ![Gutter glyph after successfully setting logpoint](/docs/assets/vscode-lp-logpoint-success.PNG)
 
 * If logpoint was not set successfully, there was an error in your expression. Make sure to have proper JSON string as an expression.
-* More details on how to set correct expressions, refer [here](#logpoint-expressions) 
+* More details on how to set correct expressions, refer [here](#logpoint-expressions)
 
 ## Downloading agent logs
 By default, logpoints agent will be logging to the ```/home/logpoints/logs/agent``` directory within appservice.  If you are running into issues (or want to report issues) with logpoints, please download the logs following the steps below:
@@ -197,7 +170,7 @@ By default, logpoints agent will be logging to the ```/home/logpoints/logs/agent
 1. Browse to the SCM url for your application: ``https://<your-app-name>.scm.azurewebsites.net/api/zip/logpoints``
 1. Login to Azure portal if you are not logged in
 1. A zip file containing the logs should automatically be downloaded.
-1. Refer to the [Reporting feedback](#reporting-feedback) section to send us these logs. 
+1. Refer to the [Reporting feedback](#reporting-feedback) section to send us these logs.
 
 ## Looking at logpoints output
 <table>
@@ -231,13 +204,13 @@ Use the below template if the link above does not work:
 * Description: brief description of the issue
 * Repro steps: Steps you did that resulted in the error you saw
 * Logs: Attach the logs from your agent. You can download the logs by following the instructions [here](#downloading-agent-logs)
-* Any other attachments that you think could help us with investigations. 
+* Any other attachments that you think could help us with investigations.
 
 # Logpoint Expressions
-Logpoints are dynamic log statements that you can insert into your running application. 
+Logpoints are dynamic log statements that you can insert into your running application.
 
-1. **We do not recommended** changing the state of your application within a logpoint expression.This can result in your application breaking or behaving unexpectedly. 
-1. **We do not recommended** doing expensive calculations within your logpoint expression. If your logpoint expressions are computing values, this can result in your application slowing down. Logpoints are meant to be lightweight logging of application state only. 
+1. **We do not recommended** changing the state of your application within a logpoint expression.This can result in your application breaking or behaving unexpectedly.
+1. **We do not recommended** doing expensive calculations within your logpoint expression. If your logpoint expressions are computing values, this can result in your application slowing down. Logpoints are meant to be lightweight logging of application state only.
 
 ## Good Examples
 Below are some examples of valid logpoints expressions for reference
@@ -248,8 +221,8 @@ Below are some examples of valid logpoints expressions for reference
 ## Bad examples
 Below are some bad examples of logpoint expressions
 1. ```while(true) { console.log(`${prop}`)}```: this will put your application in an infinite loop.
-1. ```prop = prop + 1``` : This is updating a variable `prop` that is defined in your application. This is not recommended. 
-1. ```debugger```: This will cause the debugger to pause your program until the debugger is disconnected. This is strongly not recommended. 
+1. ```prop = prop + 1``` : This is updating a variable `prop` that is defined in your application. This is not recommended.
+1. ```debugger```: This will cause the debugger to pause your program until the debugger is disconnected. This is strongly not recommended.
 1. **Runtime errors**: ```foo=bar``` : If `bar` is not defined, you will see an error similar to below in the console output for your AppService. ![Logpoint showing up in log stream](/docs/assets/vscode-logpoint-bad-expression-1.PNG)
-1. **Invalid expressions**: If logpoints are invalid, you can see an error in VS Code as shown here. 
-![Logpoint showing up in log stream](/docs/assets/vscode-bad-lp-alert.PNG) 
+1. **Invalid expressions**: If logpoints are invalid, you can see an error in VS Code as shown here.
+![Logpoint showing up in log stream](/docs/assets/vscode-bad-lp-alert.PNG)
